@@ -5,6 +5,12 @@ import type { Chapter, Question } from "./types";
 
 // Function to seed initial data, now also updates existing chapters
 export async function seedInitialData() {
+  // This function should ideally be run manually via a script, not on app startup.
+  // For this project, we assume it's run once or when data needs updating.
+  if (process.env.VERCEL) {
+      console.log("Skipping seeding on Vercel.");
+      return;
+  }
   console.log("Checking and seeding data...");
   const batch = writeBatch(db);
   const chaptersRef = collection(db, "chapters");
@@ -34,6 +40,11 @@ export async function seedInitialData() {
 
 // Function to get all chapters with their questions
 export async function getChapters(): Promise<Chapter[]> {
+  // Prevent this from running on the server during the build process on Vercel
+  if (typeof window === 'undefined') {
+    return [];
+  }
+  
   const chaptersRef = collection(db, "chapters");
   const chaptersSnapshot = await getDocs(chaptersRef);
   
@@ -52,8 +63,9 @@ export async function getChapters(): Promise<Chapter[]> {
 
     // Sort questions by their original ID numbering
     questions.sort((a, b) => {
-      const aNum = parseInt(a.id.split('-')[1]);
-      const bNum = parseInt(b.id.split('-')[1]);
+      // Safely parse IDs that might not have a hyphen
+      const aNum = parseInt(a.id.split('-')[1] || '0');
+      const bNum = parseInt(b.id.split('-')[1] || '0');
       return aNum - bNum;
     });
 
@@ -65,6 +77,12 @@ export async function getChapters(): Promise<Chapter[]> {
 
   // Sort chapters by ID
   chapters.sort((a,b) => a.id - b.id);
+
+  // If firestore is empty, maybe seed it or return local data
+  if (chapters.length === 0) {
+      console.log("Firestore is empty, consider seeding data.");
+      return initialChapters;
+  }
 
   return chapters;
 }
@@ -78,8 +96,8 @@ export async function addQuestionsToChapter(chapterId: number, questions: Questi
   const chapterDoc = await getDoc(chapterRef);
   if (!chapterDoc.exists()) {
     // Optionally create chapter if it doesn't exist
-    // For now, we'll throw an error.
-    throw new Error(`Chapter with ID ${chapterId} does not exist.`);
+    // For now, we'll create it.
+    await setDoc(chapterRef, { id: chapterId, title: `Chapter ${chapterId}` });
   }
 
   const batch = writeBatch(db);
