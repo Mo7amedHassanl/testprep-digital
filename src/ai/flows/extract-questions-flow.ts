@@ -21,6 +21,7 @@ const QuestionJsonOutputSchema = z.object({
     type: z.enum(["multiple_choice", "true_false"]).describe("The type of the question."),
     question: z.string().describe("The main statement of the question."),
     table: z.string().optional().describe("A LaTeX formatted string for a table, if present. Otherwise null."),
+    image_url: z.string().optional().describe("A URL to an image, if present. Otherwise null."),
     options: z.array(z.string()).optional().describe("An array of choice strings for multiple_choice questions."),
     correct_answer: z.string().describe("The correct answer. For multiple_choice, this is the letter (A, B, C, etc.). For true_false, it's 'True' or 'False'."),
     explanation: z.string().nullable().describe("The explanation for the correct answer."),
@@ -53,9 +54,10 @@ const prompt = ai.definePrompt({
   2.  For 'true_false' questions, the 'options' field should be omitted, and the 'correct_answer' should be either 'True' or 'False'.
   3.  The 'id' for each question should be its question number.
   4.  If a question includes a clearly defined table, extract the LaTeX content into the 'table' field. If not, the table field should be null.
-  5.  Ensure all LaTeX expressions within the question, options, and explanation are preserved exactly as they appear.
-  6.  The 'category' should be a pipe-separated string of the concepts.
-  7.  The 'type_label' should be the value associated with MSC (e.g., Conceptual).
+  5.  If a question includes an image, extract the image URL into the 'image_url' field. If not, the image_url field should be null.
+  6.  Ensure all LaTeX expressions within the question, options, and explanation are preserved exactly as they appear.
+  7.  The 'category' should be a pipe-separated string of the concepts.
+  8.  The 'type_label' should be the value associated with MSC (e.g., Conceptual).
   
   Generate a JSON object that strictly follows the output schema.`,
 });

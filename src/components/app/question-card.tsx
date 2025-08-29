@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { LatexRenderer } from "./latex-renderer";
 import { BlockMath } from "react-katex";
+import Image from "next/image";
 
 interface QuestionCardProps {
   question: Question;
@@ -94,6 +95,18 @@ export function QuestionCard({ question, questionNumber, onAnswer }: QuestionCar
             <div className="flex-1 pt-0.5">
               <LatexRenderer content={question.statement} />
               {question.table && <BlockMath math={question.table} />}
+              {question.imageUrl && (
+                <div className="mt-4">
+                  <Image
+                    src={question.imageUrl}
+                    alt={`Question ${questionNumber} image`}
+                    width={400}
+                    height={300}
+                    className="rounded-md"
+                    data-ai-hint="scientific illustration"
+                  />
+                </div>
+              )}
             </div>
         </CardTitle>
         <CardDescription>

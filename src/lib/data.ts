@@ -510,6 +510,30 @@ export const chapters: Chapter[] = [
             "density"
         ],
         msc: "Conceptual",
+      },
+      {
+        id: '1-23',
+        type: 'MCQ',
+        statement: 'Consider the image of the graduated cylinder. If the liquid has a mass of 25.0 g, what is its density?',
+        imageUrl: 'https://picsum.photos/400/300',
+        choices: [
+          '1.00 g/mL',
+          '1.25 g/mL',
+          '0.80 g/mL',
+          'Cannot be determined',
+          '1.50 g/mL',
+        ],
+        correctAnswer: '1.25 g/mL',
+        explanation: 'The volume in the cylinder is 20.0 mL. Density = Mass / Volume = 25.0 g / 20.0 mL = 1.25 g/mL.',
+        difficulty: 'Medium',
+        reference: '1.6',
+        keyConcepts: [
+          'Chemistry',
+          'density',
+          'measurement',
+          'volume',
+        ],
+        msc: 'Quantitative',
       }
     ],
   },

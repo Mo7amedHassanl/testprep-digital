@@ -5,6 +5,7 @@ export type Question = {
   type: QuestionType;
   statement: string;
   table?: string;
+  imageUrl?: string;
   choices: string[];
   correctAnswer: string;
   explanation: string;
