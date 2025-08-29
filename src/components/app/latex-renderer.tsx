@@ -8,9 +8,9 @@ interface LatexRendererProps {
 }
 
 export function LatexRenderer({ content }: LatexRendererProps) {
-  // Regex to find content enclosed in $...$ for inline math
-  // or $$...$$ for block math. It handles nested delimiters.
-  const regex = /(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$)/g;
+  // Regex to find content enclosed in $...$ for inline math, $$...$$ for block math,
+  // or a \begin{...}...\end{...} block.
+  const regex = /(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$|\\begin\{[\s\S]*?\}\\end\{[\s\S]*?\})/g;
   const parts = content.split(regex);
 
   return (
@@ -23,6 +23,10 @@ export function LatexRenderer({ content }: LatexRendererProps) {
         if (part.startsWith('$') && part.endsWith('$')) {
           // Inline math: $...$
           return <InlineMath key={index} math={part.slice(1, -1)} />;
+        }
+        if (part.startsWith('\\begin{')) {
+            // LaTeX environments like tabular
+            return <BlockMath key={index} math={part} />;
         }
         // Regular text
         return <span key={index}>{part}</span>;
