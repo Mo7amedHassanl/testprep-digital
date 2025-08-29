@@ -29,8 +29,9 @@ export function ChapterNavigation({
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <div className="flex items-center gap-2">
-           <h2 className="font-headline text-lg font-semibold">Chapters</h2>
+        <div className="flex items-center justify-between">
+           <h2 className="font-headline text-lg font-semibold group-data-[collapsible=icon]:hidden">Chapters</h2>
+           <SidebarTrigger className="group-data-[collapsible=icon]:hidden"/>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -48,7 +49,7 @@ export function ChapterNavigation({
                     className: "font-headline",
                   }}
                 >
-                  <BookOpen />
+                  <span className="text-sm font-medium w-4 text-center">{chapter.id}</span>
                   <span>{chapter.title}</span>
                   {score && totalQuestions > 0 && (
                      <Badge variant="secondary" className="ml-auto">
