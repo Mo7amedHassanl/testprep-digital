@@ -1,88 +1,47 @@
-# Deploying Your Application with GitHub and Firebase App Hosting
+# Deploying Your Application with GitHub and Vercel
 
-This guide will walk you through the process of deploying your Next.js application using a GitHub repository and Firebase App Hosting. This setup enables Continuous Deployment (CD), meaning your application will automatically redeploy whenever you push changes to your GitHub repository.
+This guide will walk you through deploying your Next.js application using your GitHub repository and [Vercel](https://vercel.com), a popular and free hosting platform for Next.js projects.
+
+This setup enables Continuous Deployment (CD), meaning your application will automatically redeploy whenever you push changes to your GitHub repository.
 
 ## Prerequisites
 
-*   A [GitHub](https://github.com/) account.
-*   A [Google Cloud](https://cloud.google.com/) account with billing enabled.
-*   The [Firebase CLI](https://firebase.google.com/docs/cli) installed on your local machine.
+*   A [GitHub](https://github.com/) account with your application code already pushed to a repository.
+*   A [Vercel](https://vercel.com) account. You can sign up for free with your GitHub account.
 
 ---
 
-## Step 1: Create a GitHub Repository
+## Step 1: Sign Up for Vercel
 
-First, you need a place to store your code on GitHub.
-
-1.  Go to [github.com/new](https://github.com/new) to create a new repository.
-2.  Give it a name (e.g., `testprep-digital`).
-3.  You can make it public or private.
-4.  Click **Create repository**.
+1.  Go to [vercel.com/signup](https://vercel.com/signup).
+2.  Choose **Continue with GitHub** to sign up or log in using your GitHub account. Authorize Vercel to access your repositories.
 
 ---
 
-## Step 2: Push Your Code to GitHub
+## Step 2: Import Your Project from GitHub
 
-Now, let's upload your local application code to the new GitHub repository.
+1.  After logging in, you will be taken to your Vercel dashboard. Click the **"Add New..."** button and select **"Project"**.
 
-1.  Initialize a Git repository in your project folder if you haven't already:
-    ```bash
-    git init
-    git add .
-    git commit -m "Initial commit"
-    ```
+2.  Vercel will show a list of your GitHub repositories. Find the repository for your application and click the **"Import"** button next to it.
 
-2.  Link your local repository to the one you created on GitHub. Replace `<YOUR_GITHUB_REPO_URL>` with the URL you copied from GitHub (it looks like `https://github.com/your-username/your-repo-name.git`):
-    ```bash
-    git remote add origin <YOUR_GITHUB_REPO_URL>
-    git branch -M main
-    ```
-
-3.  Push your code to the `main` branch on GitHub:
-    ```bash
-    git push -u origin main
-    ```
+3.  If you don't see your repository, you may need to configure the Vercel GitHub App to give it access. You can click the link to **"Adjust GitHub App Permissions"** and select the repository you want to deploy.
 
 ---
 
-## Step 3: Set up Firebase App Hosting
+## Step 3: Configure and Deploy
 
-Next, we will configure Firebase App Hosting to automatically build and deploy your app from your GitHub repository.
+1.  **Project Configuration**: Vercel is smart and will automatically detect that you are deploying a Next.js application. You generally do not need to change any of the default settings.
 
-1.  **Login to Firebase**:
-    ```bash
-    firebase login
-    ```
+2.  **Environment Variables**: If your project required any environment variables (your current project does not, but future ones might), you could add them in this section.
 
-2.  **Initialize App Hosting**: In your project's root directory, run the following command:
-    ```bash
-    firebase apphosting:backends:create
-    ```
+3.  **Deploy**: Click the **"Deploy"** button.
 
-3.  **Follow the Prompts**:
-    *   When asked, select the Firebase project you've been using (`testprep-digital`).
-    *   Choose a location for your backend (e.g., `us-central1`).
-    *   When prompted to **"Set up a GitHub repository for continuous deployment?"**, select **Yes**.
-    *   You will be asked to authorize Firebase to access your GitHub account.
-    *   Select the GitHub repository you created in Step 1.
-    *   Keep the branch as `main` for your production deployment.
-
-Firebase will now connect to your GitHub repository.
+That's it! Vercel will now start building and deploying your application. You can watch the progress in the build logs.
 
 ---
 
-## Step 4: Trigger a Deployment
+## Step 4: Visit Your Live Site
 
-The connection is now live. To trigger your first deployment, simply push a change to your GitHub repository.
+Once the deployment is complete, Vercel will provide you with a public URL (e.g., `your-repo-name.vercel.app`). You can click on it to see your live application.
 
-1.  Make a small change to your code. For example, you can edit `README.md`.
-2.  Commit and push the change:
-    ```bash
-    git add .
-    git commit -m "Triggering first deployment"
-    git push origin main
-    ```
-
-You can now visit the [Firebase Console](https://console.firebase.google.com/), navigate to the **App Hosting** section, and you will see your deployment in progress. Once it's complete, you will get a public URL where you can view your live application.
-
-From now on, every `git push` to your `main` branch will automatically trigger a new deployment.
+From now on, every `git push` to your `main` branch will automatically trigger a new deployment on Vercel.
