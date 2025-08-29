@@ -3,34 +3,32 @@ import { db } from "./firebase";
 import { chapters as initialChapters } from "./data";
 import type { Chapter, Question } from "./types";
 
-// Function to seed initial data if the database is empty
+// Function to seed initial data, now also updates existing chapters
 export async function seedInitialData() {
+  console.log("Checking and seeding data...");
+  const batch = writeBatch(db);
   const chaptersRef = collection(db, "chapters");
-  const snapshot = await getDocs(chaptersRef);
 
-  if (snapshot.empty) {
-    console.log("Database is empty, seeding initial data...");
-    const batch = writeBatch(db);
+  for (const chapter of initialChapters) {
+    const chapterRef = doc(db, "chapters", String(chapter.id));
+    const { questions, ...chapterData } = chapter;
+    
+    // Set chapter metadata (title, id)
+    // This will create or overwrite the chapter document
+    batch.set(chapterRef, chapterData);
 
-    for (const chapter of initialChapters) {
-      const chapterRef = doc(db, "chapters", String(chapter.id));
-      const { questions, ...chapterData } = chapter;
-      batch.set(chapterRef, chapterData);
-
-      if (questions && questions.length > 0) {
-        const questionsRef = collection(db, `chapters/${chapter.id}/questions`);
-        for (const question of questions) {
-          const questionRef = doc(questionsRef, question.id);
-          batch.set(questionRef, question);
-        }
+    if (questions && questions.length > 0) {
+      const questionsRef = collection(db, `chapters/${chapter.id}/questions`);
+      for (const question of questions) {
+        const questionRef = doc(questionsRef, question.id);
+        // Set each question, creating or overwriting it
+        batch.set(questionRef, question);
       }
     }
-
-    await batch.commit();
-    console.log("Initial data seeded successfully.");
-  } else {
-    // console.log("Database already contains data, skipping seed.");
   }
+
+  await batch.commit();
+  console.log("Data seeding/update complete.");
 }
 
 
