@@ -2,7 +2,7 @@
 "use client";
 
 import { MainLayout } from '@/components/app/main-layout';
-import { getChapters, seedInitialData } from '@/lib/firestore';
+import { getChapters } from '@/lib/firestore';
 import type { Chapter } from '@/lib/types';
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
@@ -14,8 +14,8 @@ export default function Home() {
   useEffect(() => {
     async function loadData() {
       try {
-        // Both seeding and fetching are now explicitly client-side.
-        await seedInitialData(); 
+        // Data is fetched on the client side. Seeding should be done manually
+        // or via a separate script, not on every page load.
         const chapterData = await getChapters();
         setChapters(chapterData);
       } catch (error) {
