@@ -2,25 +2,26 @@
 "use client";
 
 import { MainLayout } from '@/components/app/main-layout';
-import { getChapters } from '@/lib/firestore';
+import { chapters as initialChapters } from '@/lib/data';
 import type { Chapter } from '@/lib/types';
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { getChapters } from '@/lib/firestore';
 
 export default function Home() {
-  const [chapters, setChapters] = useState<Chapter[]>([]);
+  const [chapters, setChapters] = useState<Chapter[]>(initialChapters);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
       try {
-        // Data is fetched on the client side. Seeding should be done manually
-        // or via a separate script, not on every page load.
         const chapterData = await getChapters();
-        setChapters(chapterData);
+        // If firestore returns data, use it. Otherwise, stick with initial data.
+        if (chapterData && chapterData.length > 0) {
+            setChapters(chapterData);
+        }
       } catch (error) {
-        console.error("Error loading chapters:", error);
-        // Handle error state in UI if necessary
+        console.error("Error loading chapters from Firestore, using local data:", error);
       } finally {
         setLoading(false);
       }
