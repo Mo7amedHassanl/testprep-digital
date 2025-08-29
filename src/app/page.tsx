@@ -14,7 +14,8 @@ export default function Home() {
   useEffect(() => {
     async function loadData() {
       try {
-        await seedInitialData(); // Seed data on the client side
+        // Both seeding and fetching are now explicitly client-side.
+        await seedInitialData(); 
         const chapterData = await getChapters();
         setChapters(chapterData);
       } catch (error) {
