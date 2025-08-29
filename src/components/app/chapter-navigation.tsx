@@ -27,10 +27,9 @@ export function ChapterNavigation({
   onSelectChapter,
 }: ChapterNavigationProps) {
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
         <div className="flex items-center gap-2">
-           <SidebarTrigger />
            <h2 className="font-headline text-lg font-semibold">Chapters</h2>
         </div>
       </SidebarHeader>

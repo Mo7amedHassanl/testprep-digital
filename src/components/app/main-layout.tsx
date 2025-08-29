@@ -1,10 +1,11 @@
 "use client";
 
 import type { Chapter, Scores } from "@/lib/types";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useState } from "react";
 import { ChapterNavigation } from "./chapter-navigation";
 import { QuestionView } from "./question-view";
+import { BookOpen } from "lucide-react";
 
 interface MainLayoutProps {
   chapters: Chapter[];
@@ -42,8 +43,12 @@ export function MainLayout({ chapters }: MainLayoutProps) {
         selectedChapterId={selectedChapterId}
       />
       <SidebarInset className="flex flex-col">
-        <header className="flex items-center justify-between border-b p-4">
-          <h1 className="font-headline text-2xl font-bold text-primary">TestPrep Digital</h1>
+        <header className="flex items-center gap-4 border-b p-2">
+           <div className="flex items-center gap-2">
+             <SidebarTrigger />
+             <BookOpen className="h-6 w-6 text-primary" />
+             <h1 className="font-headline text-2xl font-bold text-primary">TestPrep Digital</h1>
+           </div>
           <div className="flex items-center gap-2">
             {/* Future header actions could go here */}
           </div>
