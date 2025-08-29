@@ -1,19 +1,23 @@
 "use client";
 
-import type { Chapter, Scores } from "@/lib/types";
+import type { Chapter, Question, Scores } from "@/lib/types";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useState } from "react";
 import { ChapterNavigation } from "./chapter-navigation";
 import { QuestionView } from "./question-view";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Upload } from "lucide-react";
+import { QuestionImporter } from "./question-importer";
+import { Button } from "../ui/button";
 
 interface MainLayoutProps {
   chapters: Chapter[];
 }
 
-export function MainLayout({ chapters }: MainLayoutProps) {
+export function MainLayout({ chapters: initialChapters }: MainLayoutProps) {
+  const [chapters, setChapters] = useState<Chapter[]>(initialChapters);
   const [selectedChapterId, setSelectedChapterId] = useState<number>(chapters[0]?.id || 1);
   const [scores, setScores] = useState<Scores>({});
+  const [isImporterOpen, setIsImporterOpen] = useState(false);
 
   const handleSelectChapter = (chapterId: number) => {
     setSelectedChapterId(chapterId);
@@ -32,6 +36,19 @@ export function MainLayout({ chapters }: MainLayoutProps) {
     });
   };
 
+  const handleImportQuestions = (chapterId: number, newQuestions: Question[]) => {
+    setChapters(prevChapters => {
+        return prevChapters.map(chapter => {
+            if (chapter.id === chapterId) {
+                // Simple merge, could be extended to avoid duplicates
+                const updatedQuestions = [...chapter.questions, ...newQuestions];
+                return { ...chapter, questions: updatedQuestions };
+            }
+            return chapter;
+        });
+    });
+  };
+
   const selectedChapter = chapters.find((c) => c.id === selectedChapterId);
 
   return (
@@ -43,14 +60,23 @@ export function MainLayout({ chapters }: MainLayoutProps) {
         selectedChapterId={selectedChapterId}
       />
       <SidebarInset className="flex flex-col">
-        <header className="flex items-center gap-4 border-b p-2">
+        <header className="flex items-center justify-between gap-4 border-b p-2">
            <div className="flex items-center gap-2">
              <SidebarTrigger />
              <BookOpen className="h-6 w-6 text-primary" />
              <h1 className="font-headline text-2xl font-bold text-primary">TestPrep Digital</h1>
            </div>
           <div className="flex items-center gap-2">
-            {/* Future header actions could go here */}
+            <Button variant="outline" size="sm" onClick={() => setIsImporterOpen(true)}>
+              <Upload className="h-4 w-4 mr-2" />
+              Import Questions
+            </Button>
+            <QuestionImporter 
+                chapters={chapters}
+                onImport={handleImportQuestions}
+                open={isImporterOpen}
+                onOpenChange={setIsImporterOpen}
+            />
           </div>
         </header>
         <div className="flex-1 overflow-y-auto">
