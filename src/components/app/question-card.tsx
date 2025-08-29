@@ -90,7 +90,14 @@ export function QuestionCard({ question, questionNumber, onAnswer }: QuestionCar
             <span className="flex-shrink-0 text-primary font-headline text-2xl">
                 {questionNumber}.
             </span>
-            <span className="flex-1 pt-0.5"><LatexRenderer content={question.statement} /></span>
+            <div className="flex-1 pt-0.5">
+              <LatexRenderer content={question.statement} />
+              {question.table && (
+                <div className="mt-4">
+                    <LatexRenderer content={question.table} />
+                </div>
+              )}
+            </div>
         </CardTitle>
         <CardDescription>
           {question.type === "MCQ"

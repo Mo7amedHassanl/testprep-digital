@@ -38,6 +38,7 @@ interface JsonInput {
     id: number;
     type: string;
     question: string;
+    table?: string;
     options?: string[];
     correct_answer: string;
     explanation: string | null;
@@ -108,6 +109,7 @@ export function QuestionImporter({
           id: `${chapterIdNum}-${q.id}`,
           type: type,
           statement: q.question.replace(/\$(\d+(\.\d+)?)\s*\\times\s*10\^({-?\d+})\$/g, (_, base, __, exp) => `${base} × 10^${exp.replace(/[{}]/g, '')}`),
+          table: q.table,
           choices: choices.map(c => c.replace(/\$(\d+(\.\d+)?)\s*\\times\s*10\^({-?\d+})\$/g, (_, base, __, exp) => `${base} × 10^${exp.replace(/[{}]/g, '')}`)),
           correctAnswer: correctAnswer,
           explanation: (q.explanation ?? "No explanation provided.").replace(/\$(\d+(\.\d+)?)\s*\\times\s*10\^({-?\d+})\$/g, (_, base, __, exp) => `${base} × 10^${exp.replace(/[{}]/g, '')}`),
