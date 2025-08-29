@@ -12,31 +12,22 @@ export function LatexRenderer({ content }: LatexRendererProps) {
     return null;
   }
   
-  // This regex is designed to capture three types of segments:
-  // 1. Block math environments: $$...$$
-  // 2. LaTeX environments: \begin{...}...\end{...}
-  // 3. Inline math: $...$
-  // 4. Any other text (including newlines) that is not one of the above.
-  const regex = /(\$\$[\s\S]*?\$\$|\\begin\{[\s\S]*?\\end\{[\s\S]*?\}|\$[\s\S]*?\$|[\s\S]+?(?=\$\$|\\begin\{|\$|$))/g;
-
+  const regex = /(\$\$[\s\S]*?\$\$|\\begin\{[\s\S]*?\\end\{[\s\S]*?\}|\$[\s\S]*?\$|[^$\\]+|\\.)/g;
   const parts = content.match(regex) || [];
 
   return (
     <>
       {parts.map((part, index) => {
         if (part.startsWith('$$') && part.endsWith('$$')) {
-          // Block math: $$...$$
-          return <BlockMath key={index} math={part.slice(2, -2).trim()} />;
-        }
-        if (part.startsWith('$') && part.endsWith('$')) {
-          // Inline math: $...$
-          return <InlineMath key={index} math={part.slice(1, -1).trim()} />;
+          return <BlockMath key={index} math={part.slice(2, -2)} />;
         }
         if (part.startsWith('\\begin{')) {
-            // LaTeX environments like tabular
-            return <BlockMath key={index} math={part.trim()} />;
+            return <BlockMath key={index} math={part} />;
         }
-        // Regular text
+        if (part.startsWith('$') && part.endsWith('$')) {
+          return <InlineMath key={index} math={part.slice(1, -1)} />;
+        }
+        // Regular text, handling newline characters
         return <span key={index} dangerouslySetInnerHTML={{ __html: part.replace(/\n/g, '<br/>') }} />;
       })}
     </>

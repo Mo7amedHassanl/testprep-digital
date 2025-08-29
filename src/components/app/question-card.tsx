@@ -83,6 +83,10 @@ export function QuestionCard({ question, questionNumber, onAnswer }: QuestionCar
       return <div className="h-5 w-5" />;
   }
 
+  const fullQuestionContent = question.table 
+    ? `${question.statement}\n${question.table}`
+    : question.statement;
+
   return (
     <Card className="overflow-hidden shadow-md transition-all hover:shadow-lg">
       <CardHeader>
@@ -91,7 +95,7 @@ export function QuestionCard({ question, questionNumber, onAnswer }: QuestionCar
                 {questionNumber}.
             </span>
             <div className="flex-1 pt-0.5">
-              <LatexRenderer content={question.statement} />
+              <LatexRenderer content={fullQuestionContent} />
             </div>
         </CardTitle>
         <CardDescription>
