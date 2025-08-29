@@ -490,8 +490,8 @@ export const chapters: Chapter[] = [
       {
         id: '1-22',
         type: 'MCQ',
-        statement: 'Consider the following data:',
-        table: "\\begin{array}{|c|c|}\\hline\n\\text{Substance} & \\text{Density (g/mL)} \\\\\n\\hline\n\\text{A} & 1.2 \\\\\n\\hline\n\\text{B} & 0.8 \\\\\n\\hline\n\\text{C} & 2.5 \\\\\n\\hline\n\\end{array}",
+        statement: "Consider the following data:",
+        table: "\\begin{array}{|c|c|}\n\\hline\n\\text{Substance} & \\text{Density (g/mL)} \\\\\n\\hline\n\\text{A} & 1.2 \\\\\n\\hline\n\\text{B} & 0.8 \\\\\n\\hline\n\\text{C} & 2.5 \\\\\n\\hline\n\\end{array}",
         choices: [
           "Substance A is the most dense.",
           "Substance B is the most dense.",
@@ -550,5 +550,7 @@ export const chapters: Chapter[] = [
     questions: [],
   }))
 ];
+
+    
 
     
