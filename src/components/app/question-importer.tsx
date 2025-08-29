@@ -21,12 +21,14 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import type { Chapter, Question } from "@/lib/types";
+import { Loader2 } from "lucide-react";
 
 interface QuestionImporterProps {
   chapters: Chapter[];
   onImport: (chapterId: number, questions: Question[]) => void;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  isPending: boolean;
 }
 
 // This is the structure of the user's JSON
@@ -51,6 +53,7 @@ export function QuestionImporter({
   onImport,
   open,
   onOpenChange,
+  isPending
 }: QuestionImporterProps) {
   const [selectedChapterId, setSelectedChapterId] = useState<string>("");
   const [jsonContent, setJsonContent] = useState("");
@@ -92,17 +95,22 @@ export function QuestionImporter({
             if (correctIndex !== -1 && q.options[correctIndex]) {
                 correctAnswer = q.options[correctIndex];
             } else {
-                throw new Error(`Invalid correct_answer '${q.correct_answer}' for question id ${q.id}`);
+                // If correct_answer is not a letter, assume it's the answer text itself
+                if(q.options.includes(q.correct_answer)) {
+                    correctAnswer = q.correct_answer;
+                } else {
+                    throw new Error(`Invalid correct_answer '${q.correct_answer}' for question id ${q.id}`);
+                }
             }
         }
 
         return {
           id: `${chapterIdNum}-${q.id}`,
           type: type,
-          statement: q.question,
-          choices: choices,
+          statement: q.question.replace(/\$(\d+(\.\d+)?)\s*\\times\s*10\^({-?\d+})\$/g, (_, base, __, exp) => `${base} × 10^${exp.replace(/[{}]/g, '')}`),
+          choices: choices.map(c => c.replace(/\$(\d+(\.\d+)?)\s*\\times\s*10\^({-?\d+})\$/g, (_, base, __, exp) => `${base} × 10^${exp.replace(/[{}]/g, '')}`)),
           correctAnswer: correctAnswer,
-          explanation: q.explanation ?? "No explanation provided.",
+          explanation: (q.explanation ?? "No explanation provided.").replace(/\$(\d+(\.\d+)?)\s*\\times\s*10\^({-?\d+})\$/g, (_, base, __, exp) => `${base} × 10^${exp.replace(/[{}]/g, '')}`),
           difficulty: q.difficulty,
           reference: q.reference,
           keyConcepts: q.category.split(" | "),
@@ -111,11 +119,8 @@ export function QuestionImporter({
       });
 
       onImport(chapterIdNum, newQuestions);
-      toast({
-        title: "Success",
-        description: `Successfully imported ${newQuestions.length} questions into Chapter ${chapterIdNum}.`,
-      });
-      onOpenChange(false);
+      // We don't close the dialog or show success here, we let the parent component handle it
+      // after the async operation is complete.
       setJsonContent("");
       setSelectedChapterId("");
     } catch (error) {
@@ -134,7 +139,7 @@ export function QuestionImporter({
         <DialogHeader>
           <DialogTitle>Import Questions</DialogTitle>
           <DialogDescription>
-            Select a chapter and paste the JSON content of the questions you want to import.
+            Select a chapter and paste the JSON content of the questions you want to import. The data will be saved permanently.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -142,7 +147,7 @@ export function QuestionImporter({
             <Label htmlFor="chapter" className="text-right">
               Chapter
             </Label>
-            <Select value={selectedChapterId} onValueChange={setSelectedChapterId}>
+            <Select value={selectedChapterId} onValueChange={setSelectedChapterId} disabled={isPending}>
                 <SelectTrigger className="col-span-3">
                     <SelectValue placeholder="Select a chapter" />
                 </SelectTrigger>
@@ -165,11 +170,15 @@ export function QuestionImporter({
               value={jsonContent}
               onChange={(e) => setJsonContent(e.target.value)}
               placeholder='Paste your JSON here...'
+              disabled={isPending}
             />
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={handleImport}>Import Questions</Button>
+          <Button onClick={handleImport} disabled={isPending || !selectedChapterId || !jsonContent}>
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Import Questions
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

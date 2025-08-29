@@ -1,7 +1,8 @@
 import { MainLayout } from '@/components/app/main-layout';
-import { chapters } from '@/lib/data';
+import { getChapters } from '@/lib/firestore';
 
-export default function Home() {
+export default async function Home() {
+  const chapters = await getChapters();
   return (
     <main>
       <MainLayout chapters={chapters} />

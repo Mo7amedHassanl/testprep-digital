@@ -483,7 +483,7 @@ export const chapters: Chapter[] = [
           'measurement',
         ],
         msc: 'Conceptual',
-      },
+      }
     ],
   },
   {
