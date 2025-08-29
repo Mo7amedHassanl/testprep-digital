@@ -104,9 +104,9 @@ export function QuestionCard({ question, questionNumber, onAnswer }: QuestionCar
           disabled={isSubmitted || isPending}
         >
           <div className="space-y-3">
-            {question.choices.map((choice) => (
+            {question.choices.map((choice, index) => (
               <Label
-                key={choice}
+                key={`${question.id}-choice-${index}`}
                 htmlFor={`${question.id}-${choice}`}
                 className={cn(
                   "flex items-center gap-4 rounded-lg border p-4 transition-colors cursor-pointer hover:bg-secondary/50",
