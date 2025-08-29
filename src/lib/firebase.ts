@@ -5,12 +5,12 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // IMPORTANT: Replace this with your actual Firebase config
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  "projectId": "testprep-digital",
+  "appId": "1:892348657654:web:3a4c65f6e208fba2f321d7",
+  "storageBucket": "testprep-digital.firebasestorage.app",
+  "apiKey": "AIzaSyCfnlaxI1FEn1VZqdodeUG4qrQpowjB8YY",
+  "authDomain": "testprep-digital.firebaseapp.com",
+  "messagingSenderId": "892348657654"
 };
 
 // Initialize Firebase
