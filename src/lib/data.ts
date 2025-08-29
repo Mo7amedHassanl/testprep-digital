@@ -1,3 +1,4 @@
+
 import type { Chapter } from './types';
 
 export const chapters: Chapter[] = [
@@ -485,6 +486,30 @@ export const chapters: Chapter[] = [
           'measurement',
         ],
         msc: 'Conceptual',
+      },
+      {
+        id: '1-22',
+        type: 'MCQ',
+        statement: 'Consider the following data:',
+        table: "\\begin{array}{|c|c|}\\hline\n\\text{Substance} & \\text{Density (g/mL)} \\\\\n\\hline\n\\text{A} & 1.2 \\\\\n\\hline\n\\text{B} & 0.8 \\\\\n\\hline\n\\text{C} & 2.5 \\\\\n\\hline\n\\end{array}",
+        choices: [
+          "Substance A is the most dense.",
+          "Substance B is the most dense.",
+          "Substance C is the most dense.",
+          "All have the same density."
+        ],
+        correctAnswer: "Substance C is the most dense.",
+        explanation: "The table shows that substance C has the highest density value of 2.5 g/mL.",
+        difficulty: "Easy",
+        reference: "1.6",
+        keyConcepts: [
+            "Chemistry",
+            "general chemistry",
+            "general concepts",
+            "measurement",
+            "density"
+        ],
+        msc: "Conceptual",
       }
     ],
   },
@@ -525,3 +550,5 @@ export const chapters: Chapter[] = [
     questions: [],
   }))
 ];
+
+    
