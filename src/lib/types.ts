@@ -4,7 +4,6 @@ export type Question = {
   id: string;
   type: QuestionType;
   statement: string;
-  table?: string;
   choices: string[];
   correctAnswer: string;
   explanation: string;

@@ -395,8 +395,7 @@ export const chapters: Chapter[] = [
       {
         id: '1-18',
         type: 'MCQ',
-        statement: 'As part of the calibration of a new laboratory balance, a 1.000-g mass is weighed with the following results:\n\nThe balance is',
-        table: "\\begin{tabular}{|c|c|}\n\\hline\nTrial & Mass \\\\\n\\hline\n1 & 1.201 \\pm 0.001 \\\\\n\\hline\n2 & 1.202 \\pm 0.001 \\\\\n\\hline\n3 & 1.200 \\pm 0.001 \\\\\n\\hline\n\\end{tabular}",
+        statement: "As part of the calibration of a new laboratory balance, a 1.000-g mass is weighed with the following results:\n\n\\begin{tabular}{|c|c|}\n\\hline\nTrial & Mass \\\\\n\\hline\n1 & 1.201 \\pm 0.001 \\\\\n\\hline\n2 & 1.202 \\pm 0.001 \\\\\n\\hline\n3 & 1.200 \\pm 0.001 \\\\\n\\hline\n\\end{tabular}\n\nThe balance is",
         choices: [
           "Both accurate and precise.",
           "Accurate but imprecise.",

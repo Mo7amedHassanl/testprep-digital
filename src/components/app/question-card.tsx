@@ -92,11 +92,6 @@ export function QuestionCard({ question, questionNumber, onAnswer }: QuestionCar
             </span>
             <div className="flex-1 pt-0.5">
               <LatexRenderer content={question.statement} />
-              {question.table && (
-                <div className="mt-4 text-card-foreground">
-                  <LatexRenderer content={question.table} />
-                </div>
-              )}
             </div>
         </CardTitle>
         <CardDescription>

@@ -12,30 +12,32 @@ export function LatexRenderer({ content }: LatexRendererProps) {
     return null;
   }
   
-  // Regex to find all occurrences of:
-  // 1. $$...$$ (block math)
-  // 2. $...$ (inline math)
-  // 3. \begin{...}...\end{...} (LaTeX environments)
-  const regex = /(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$|\\begin\{[\s\S]*?}\\end\{[\s\S]*?\})/g;
-  const parts = content.split(regex).filter(part => part);
+  // This regex is designed to capture three types of segments:
+  // 1. Block math environments: $$...$$
+  // 2. LaTeX environments: \begin{...}...\end{...}
+  // 3. Inline math: $...$
+  // 4. Any other text (including newlines) that is not one of the above.
+  const regex = /(\$\$[\s\S]*?\$\$|\\begin\{[\s\S]*?\\end\{[\s\S]*?\}|\$[\s\S]*?\$|[\s\S]+?(?=\$\$|\\begin\{|\$|$))/g;
+
+  const parts = content.match(regex) || [];
 
   return (
     <>
       {parts.map((part, index) => {
         if (part.startsWith('$$') && part.endsWith('$$')) {
           // Block math: $$...$$
-          return <BlockMath key={index} math={part.slice(2, -2)} />;
+          return <BlockMath key={index} math={part.slice(2, -2).trim()} />;
         }
         if (part.startsWith('$') && part.endsWith('$')) {
           // Inline math: $...$
-          return <InlineMath key={index} math={part.slice(1, -1)} />;
+          return <InlineMath key={index} math={part.slice(1, -1).trim()} />;
         }
         if (part.startsWith('\\begin{')) {
             // LaTeX environments like tabular
-            return <BlockMath key={index} math={part} />;
+            return <BlockMath key={index} math={part.trim()} />;
         }
         // Regular text
-        return <span key={index}>{part}</span>;
+        return <span key={index} dangerouslySetInnerHTML={{ __html: part.replace(/\n/g, '<br/>') }} />;
       })}
     </>
   );
