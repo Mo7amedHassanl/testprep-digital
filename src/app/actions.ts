@@ -5,6 +5,12 @@ import {
   type ImmediateFeedbackInput,
   type ImmediateFeedbackOutput,
 } from "@/ai/flows/immediate-feedback-with-reasoning";
+import {
+  extractQuestions,
+  type ExtractQuestionsInput,
+  type QuestionJsonOutput,
+} from "@/ai/flows/extract-questions-flow";
+
 
 export async function getFeedback(
   input: ImmediateFeedbackInput
@@ -31,5 +37,19 @@ export async function getFeedback(
       isCorrect: false,
       feedback: "Sorry, an error occurred while generating feedback. Please try again.",
     };
+  }
+}
+
+export async function extractQuestionsFromText(
+  input: ExtractQuestionsInput
+): Promise<QuestionJsonOutput> {
+  try {
+    const result = await extractQuestions(input);
+    return result;
+  } catch (error) {
+    console.error("Error extracting questions from text:", error);
+    // This is a simplified error handling. In a real app, you might
+    // want to return a more structured error object.
+    throw new Error("Failed to extract questions. Please check the format of your text and try again.");
   }
 }

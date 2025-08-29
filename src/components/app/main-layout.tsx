@@ -5,13 +5,14 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { useState, useTransition } from "react";
 import { ChapterNavigation } from "./chapter-navigation";
 import { QuestionView } from "./question-view";
-import { BookOpen, Upload } from "lucide-react";
+import { BookOpen, Upload, Bot } from "lucide-react";
 import { QuestionImporter } from "./question-importer";
 import { Button } from "../ui/button";
 import { addQuestionsToChapter } from "@/lib/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
+import { QuestionExtractor } from "./question-extractor";
 
 interface MainLayoutProps {
   chapters: Chapter[];
@@ -22,6 +23,7 @@ export function MainLayout({ chapters: initialChapters }: MainLayoutProps) {
   const [selectedChapterId, setSelectedChapterId] = useState<number>(chapters[0]?.id || 1);
   const [scores, setScores] = useState<Scores>({});
   const [isImporterOpen, setIsImporterOpen] = useState(false);
+  const [isExtractorOpen, setIsExtractorOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
@@ -101,6 +103,10 @@ export function MainLayout({ chapters: initialChapters }: MainLayoutProps) {
              <h1 className="font-headline text-2xl font-bold text-primary">TestPrep Digital</h1>
            </div>
           <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => setIsExtractorOpen(true)}>
+                <Bot className="h-4 w-4 mr-2" />
+                Extract from Text
+            </Button>
             <Button variant="outline" size="sm" onClick={() => setIsImporterOpen(true)} disabled={isPending}>
               {isPending ? (
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -109,6 +115,10 @@ export function MainLayout({ chapters: initialChapters }: MainLayoutProps) {
               )}
               Import Questions
             </Button>
+            <QuestionExtractor
+                open={isExtractorOpen}
+                onOpenChange={setIsExtractorOpen}
+            />
             <QuestionImporter 
                 chapters={chapters}
                 onImport={handleImportQuestions}
