@@ -31,6 +31,7 @@ import { CheckCircle2, Info, Lightbulb, Loader2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { LatexRenderer } from "./latex-renderer";
+import { BlockMath } from "react-katex";
 
 interface QuestionCardProps {
   question: Question;
@@ -83,10 +84,6 @@ export function QuestionCard({ question, questionNumber, onAnswer }: QuestionCar
       return <div className="h-5 w-5" />;
   }
 
-  const fullQuestionContent = question.table 
-    ? `${question.statement}\n${question.table}`
-    : question.statement;
-
   return (
     <Card className="overflow-hidden shadow-md transition-all hover:shadow-lg">
       <CardHeader>
@@ -95,7 +92,8 @@ export function QuestionCard({ question, questionNumber, onAnswer }: QuestionCar
                 {questionNumber}.
             </span>
             <div className="flex-1 pt-0.5">
-              <LatexRenderer content={fullQuestionContent} />
+              <LatexRenderer content={question.statement} />
+              {question.table && <BlockMath math={question.table} />}
             </div>
         </CardTitle>
         <CardDescription>
