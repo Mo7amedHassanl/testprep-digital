@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import { addQuestionsToChapter } from "@/lib/firestore";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { ThemeToggle } from "./theme-toggle";
 
 interface MainLayoutProps {
   chapters: Chapter[];
@@ -115,6 +116,7 @@ export function MainLayout({ chapters: initialChapters }: MainLayoutProps) {
                 onOpenChange={setIsImporterOpen}
                 isPending={isPending}
             />
+            <ThemeToggle />
           </div>
         </header>
         <div className="flex-1 overflow-y-auto">
