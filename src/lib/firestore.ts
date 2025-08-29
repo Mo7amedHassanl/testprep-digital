@@ -29,15 +29,13 @@ export async function seedInitialData() {
     await batch.commit();
     console.log("Initial data seeded successfully.");
   } else {
-    console.log("Database already contains data, skipping seed.");
+    // console.log("Database already contains data, skipping seed.");
   }
 }
 
 
 // Function to get all chapters with their questions
 export async function getChapters(): Promise<Chapter[]> {
-  await seedInitialData(); // Ensure data is seeded if needed
-
   const chaptersRef = collection(db, "chapters");
   const chaptersSnapshot = await getDocs(chaptersRef);
   
