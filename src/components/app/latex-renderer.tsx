@@ -12,10 +12,12 @@ export function LatexRenderer({ content }: LatexRendererProps) {
     return null;
   }
   
-  // Regex to find content enclosed in $...$ for inline math, $$...$$ for block math,
-  // or a \begin{...}...\end{...} block.
+  // Regex to find all occurrences of:
+  // 1. $$...$$ (block math)
+  // 2. $...$ (inline math)
+  // 3. \begin{...}...\end{...} (LaTeX environments)
   const regex = /(\$\$[\s\S]*?\$\$|\$[\s\S]*?\$|\\begin\{[\s\S]*?}\\end\{[\s\S]*?\})/g;
-  const parts = content.split(regex);
+  const parts = content.split(regex).filter(part => part);
 
   return (
     <>
@@ -29,7 +31,7 @@ export function LatexRenderer({ content }: LatexRendererProps) {
           return <InlineMath key={index} math={part.slice(1, -1)} />;
         }
         if (part.startsWith('\\begin{')) {
-            // LaTeX environments like tabular, handling newlines correctly
+            // LaTeX environments like tabular
             return <BlockMath key={index} math={part} />;
         }
         // Regular text
