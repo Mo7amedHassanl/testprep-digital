@@ -30,6 +30,7 @@ import {
 import { CheckCircle2, Info, Lightbulb, Loader2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { LatexRenderer } from "./latex-renderer";
 
 interface QuestionCardProps {
   question: Question;
@@ -89,7 +90,7 @@ export function QuestionCard({ question, questionNumber, onAnswer }: QuestionCar
             <span className="flex-shrink-0 text-primary font-headline text-2xl">
                 {questionNumber}.
             </span>
-            <span className="flex-1 pt-0.5">{question.statement}</span>
+            <span className="flex-1 pt-0.5"><LatexRenderer content={question.statement} /></span>
         </CardTitle>
         <CardDescription>
           {question.type === "MCQ"
@@ -107,14 +108,14 @@ export function QuestionCard({ question, questionNumber, onAnswer }: QuestionCar
             {question.choices.map((choice, index) => (
               <Label
                 key={`${question.id}-choice-${index}`}
-                htmlFor={`${question.id}-${choice}`}
+                htmlFor={`${question.id}-${choice}-${index}`}
                 className={cn(
                   "flex items-center gap-4 rounded-lg border p-4 transition-colors cursor-pointer hover:bg-secondary/50",
                   getChoiceClass(choice)
                 )}
               >
-                <RadioGroupItem value={choice} id={`${question.id}-${choice}`} />
-                <span className="flex-1">{choice}</span>
+                <RadioGroupItem value={choice} id={`${question.id}-${choice}-${index}`} />
+                <span className="flex-1"><LatexRenderer content={choice} /></span>
                 {getChoiceIcon(choice)}
               </Label>
             ))}
@@ -138,7 +139,7 @@ export function QuestionCard({ question, questionNumber, onAnswer }: QuestionCar
                 <AlertTitle className="font-headline">
                     {feedback.isCorrect ? "Correct!" : "Incorrect"}
                 </AlertTitle>
-                <AlertDescription>{feedback.feedback}</AlertDescription>
+                <AlertDescription><LatexRenderer content={feedback.feedback} /></AlertDescription>
             </Alert>
         )}
         <Accordion type="single" collapsible className="w-full">
